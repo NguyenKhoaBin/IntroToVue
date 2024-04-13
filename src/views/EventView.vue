@@ -6,10 +6,7 @@
     >
       You are successfully registered for {{ selectedEvent.title }}
     </span>
-    <div
-      v-if="selectedEvent"
-      class="py-5 my-3"
-    >
+    <div v-if="selectedEvent" class="py-5 my-3">
       <div
         class="items-center w-full space-y-2 text-xl transition-all select-none"
       >
@@ -34,10 +31,7 @@
         />
       </div>
     </div>
-    <Register
-      v-if="isRegisterPage"
-      :register="register"
-    />
+    <Register v-if="isRegisterPage" :register="register" />
     <Edit v-if="isEditPage" />
   </div>
 </template>

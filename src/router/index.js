@@ -6,6 +6,8 @@ import ReviewsView from "../views/ReviewsView.vue";
 import EventsView from "../views/EventsView.vue";
 import EventView from "../views/EventView.vue";
 import TodoListView from "../views/TodoListView.vue";
+import AddEventView from "../views/AddEventView.vue";
+import SignUpView from "../views/SignUpView.vue";
 
 const routes = [
   {
@@ -36,10 +38,17 @@ const routes = [
     path: "/event/:id/edit",
     component: EventView,
   },
-  ,
+  {
+    path: "/event/add",
+    component: AddEventView,
+  },
   {
     path: "/todo",
     component: TodoListView,
+  },
+  {
+    path: "/signup",
+    component: SignUpView,
   },
 ];
 const router = createRouter({

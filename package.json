@@ -10,12 +10,15 @@
     "lint": "eslint . --fix"
   },
   "dependencies": {
+    "@vee-validate/rules": "^4.12.6",
     "@vue/cli-plugin-eslint": "^5.0.8",
     "pinia": "^2.1.7",
     "primeicons": "^7.0.0",
+    "vee-validate": "^4.12.6",
     "vue": "^3.4.21",
     "vue-pagination": "^0.3.3",
-    "vue-router": "^4.3.0"
+    "vue-router": "^4.3.0",
+    "yup": "^1.4.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.4",

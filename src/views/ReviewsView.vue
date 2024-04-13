@@ -4,63 +4,45 @@
       v-if="reviews.length > 0"
       class="w-[470px] py-[45px] px-4 bg-white border-2 my-5"
     >
-      <p class="text-3xl font-[500] mb-5">
-        Reviews:
-      </p>
-      <div
-        v-for="(review, index) in reviews"
-        :key="index"
-        class="mt-3"
-      >
+      <p class="text-3xl font-[500] mb-5">Reviews:</p>
+      <div v-for="(review, index) in reviews" :key="index" class="mt-3">
         <p class="px-8 text-lg">
           {{ review.name }} gave this {{ review.rating }} stars
         </p>
-        <p class="px-8 text-lg">
-          " {{ review.review }} "
-        </p>
+        <p class="px-8 text-lg">" {{ review.review }} "</p>
       </div>
     </div>
 
     <div class="w-[470px] py-[45px] px-4 bg-white border-2 my-5">
-      <p class="text-3xl font-[500] mb-5">
-        Leave a review
-      </p>
-      <form
-        action=""
-        class="space-y-3"
-      >
-        <label
-          for="name"
-          class="block"
-        >Name:</label>
-        <input
+      <p class="text-3xl font-[500] mb-5">Leave a review</p>
+      <form action="" class="space-y-3">
+        <base-input
           id="name"
           v-model="formData.name"
           type="text"
           name="name"
-          class="w-full p-2 border"
-        >
-        <label
-          for="review"
-          class="block"
-        >Review:</label>
-        <textarea
+          label="Name"
+          BaseLabelClass="block"
+          BaseInputClass="w-full p-2 border"
+        />
+
+        <BaseInputArea
           id="review"
           v-model="formData.review"
           name="review"
+          label="Review:"
           rows="4"
-          class="w-full p-2 border"
           cols="50"
+          BaseInputClass="w-full p-2 border"
+          BaseLabelClass="block"
         />
-        <label
-          class="block"
-          for="rating"
-        >Rating:</label>
-        <select
-          id="rating"
+
+        <BaseSelect
           v-model="formData.rating"
-          name="rating"
-          class="w-full p-2 border"
+          id="rating"
+          baseClass="w-full p-2 border"
+          label="Rating:"
+          labelClass="block"
         >
           <option
             v-for="rating in [1, 2, 3, 4, 5]"
@@ -69,7 +51,8 @@
           >
             {{ rating }}
           </option>
-        </select>
+        </BaseSelect>
+
         <button
           type="button"
           class="bg-[#435264] block mx-auto h-[60px] w-[160px] text-center rounded-md text-white text-lg"
@@ -82,7 +65,16 @@
   </div>
 </template>
 <script>
+import BaseInput from "../components/customInput/BaseInput.vue";
+import BaseSelect from "../components/customInput/BaseSelect.vue";
+import BaseInputArea from "../components/customInput/BaseInputArea.vue";
+
 export default {
+  components: {
+    BaseSelect,
+    BaseInput,
+    BaseInputArea,
+  },
   data() {
     return {
       reviews: [],

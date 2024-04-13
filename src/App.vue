@@ -6,7 +6,9 @@ const navLinks = [
   { path: "/events", label: "Events" },
   { path: "/reviews", label: "Reviews" },
   { path: "/about", label: "About" },
-  { path: "todo", label: "Todo List" },
+  { path: "/todo", label: "Todo List" },
+  { path: "/event/add", label: "Add Event" },
+  { path: "/signup", label: "SignUp" },
 ];
 
 const route = useRoute();
