@@ -16,7 +16,7 @@
     <div class="w-[470px] py-[45px] px-4 bg-white border-2 my-5">
       <p class="text-3xl font-[500] mb-5">Leave a review</p>
       <form action="" class="space-y-3">
-        <base-input
+        <BaseInput
           id="name"
           v-model="formData.name"
           type="text"
@@ -64,49 +64,38 @@
     </div>
   </div>
 </template>
-<script>
-import BaseInput from "../components/customInput/BaseInput.vue";
-import BaseSelect from "../components/customInput/BaseSelect.vue";
-import BaseInputArea from "../components/customInput/BaseInputArea.vue";
 
-export default {
-  components: {
-    BaseSelect,
-    BaseInput,
-    BaseInputArea,
-  },
-  data() {
-    return {
-      reviews: [],
-      formData: {
-        name: "",
-        review: "",
-        rating: "1",
-      },
-    };
-  },
-  computed: {
-    isFormIncomplete() {
-      return [
-        this.formData.name,
-        this.formData.review,
-        this.formData.rating,
-      ].some((field) => !field);
-    },
-  },
-  methods: {
-    handleSubmit() {
-      if (this.isFormIncomplete) {
-        alert("Review is incomplete. Please fill out every field.");
-        return;
-      }
-      this.reviews.push({
-        name: this.formData.name,
-        review: this.formData.review,
-        rating: this.formData.rating,
-      });
-      // console.log(this.reviews);
-    },
-  },
+<script setup>
+import { ref, computed } from "vue";
+import BaseInput from "@/components/customInput/BaseInput.vue";
+import BaseSelect from "@/components/customInput/BaseSelect.vue";
+import BaseInputArea from "@/components/customInput/BaseInputArea.vue";
+
+const reviews = ref([]);
+const formData = ref({
+  name: "",
+  review: "",
+  rating: "1",
+});
+
+const isFormIncomplete = computed(() => {
+  return [
+    formData.value.name,
+    formData.value.review,
+    formData.value.rating,
+  ].some((field) => !field);
+});
+
+const handleSubmit = () => {
+  if (isFormIncomplete.value) {
+    alert("Review is incomplete. Please fill out every field.");
+    return;
+  }
+  reviews.value.push({
+    name: formData.value.name,
+    review: formData.value.review,
+    rating: formData.value.rating,
+  });
+  // console.log(reviews.value);
 };
 </script>

@@ -9,6 +9,7 @@ const navLinks = [
   { path: "/todo", label: "Todo List" },
   { path: "/event/add", label: "Add Event" },
   { path: "/signup", label: "SignUp" },
+  { path: "/draggable", label: "Draggable" },
 ];
 
 const route = useRoute();

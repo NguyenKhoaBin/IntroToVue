@@ -25,7 +25,7 @@
 
 <script>
 import { defineComponent } from "vue";
-import { useTodoStore } from "../stores/todoStore";
+import { useTodoStore } from "@/stores/todoStore";
 
 export default defineComponent({
   methods: {

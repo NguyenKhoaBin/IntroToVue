@@ -38,11 +38,11 @@
 
 <script setup>
 import { computed, ref } from "vue";
-import events from "../data/events";
+import events from "@/data/events";
 import { RouterLink, useRoute, useRouter } from "vue-router";
-import Detail from "../components/Detail.vue";
-import Register from "../components/Register.vue";
-import Edit from "../components/Edit.vue";
+import Detail from "@/components/Detail.vue";
+import Register from "@/components/Register.vue";
+import Edit from "@/components/Edit.vue";
 
 const route = useRoute();
 const router = useRouter();
