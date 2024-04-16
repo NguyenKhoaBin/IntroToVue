@@ -2,7 +2,7 @@
   <div class="flex flex-col items-center">
     <div
       v-if="reviews.length > 0"
-      class="w-[470px] py-[45px] px-4 bg-white border-2 my-5"
+      class="w-[600px] py-[45px] px-4 bg-white border-2 my-5"
     >
       <p class="text-3xl font-[500] mb-5">Reviews:</p>
       <div v-for="(review, index) in reviews" :key="index" class="mt-3">
@@ -13,7 +13,7 @@
       </div>
     </div>
 
-    <div class="w-[470px] py-[45px] px-4 bg-white border-2 my-5">
+    <div class="w-[500px] py-[45px] px-4 bg-white border-2 my-5">
       <p class="text-3xl font-[500] mb-5">Leave a review</p>
       <form action="" class="space-y-3">
         <BaseInput
@@ -23,7 +23,6 @@
           name="name"
           label="Name"
           BaseLabelClass="block"
-          BaseInputClass="w-full p-2 border"
         />
 
         <BaseInputArea
@@ -40,7 +39,6 @@
         <BaseSelect
           v-model="formData.rating"
           id="rating"
-          baseClass="w-full p-2 border"
           label="Rating:"
           labelClass="block"
         >
@@ -53,11 +51,7 @@
           </option>
         </BaseSelect>
 
-        <button
-          type="button"
-          class="bg-[#435264] block mx-auto h-[60px] w-[160px] text-center rounded-md text-white text-lg"
-          @click="handleSubmit"
-        >
+        <button type="button" class="baseButton" @click="handleSubmit">
           Submit
         </button>
       </form>

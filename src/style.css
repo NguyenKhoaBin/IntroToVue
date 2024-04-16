@@ -1,3 +1,16 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.baseInput {
+    @apply w-[460px] h-[60px] rounded-[4px] border-[1px] border-solid bg-[#fff] border-[#9F9F9F] py-[20px] px-[24px] outline-none text-base font-normal leading-[20px];
+  }
+.baseArea {
+    @apply w-[460px] h-full rounded-[4px] border-[1px] border-solid bg-[#fff] border-[#9F9F9F] py-[20px] px-[24px] outline-none text-base font-normal leading-[20px];
+  }
+
+.baseButton {
+    @apply w-[460px] h-[60px] py-[14px] px-[30px] gap-[10px] rounded-[4px] bg-[#FAAD1B] shadow-md text-[18px] leading-[20px] font-[600];
+    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
+  }

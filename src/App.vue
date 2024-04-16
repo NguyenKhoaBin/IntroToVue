@@ -8,8 +8,8 @@ const navLinks = [
   { path: "/about", label: "About" },
   { path: "/todo", label: "Todo List" },
   { path: "/event/add", label: "Add Event" },
-  { path: "/signup", label: "SignUp" },
   { path: "/draggable", label: "Draggable" },
+  { path: "/signIn", label: "SigIn" },
 ];
 
 const route = useRoute();

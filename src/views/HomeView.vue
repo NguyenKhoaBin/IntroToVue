@@ -38,7 +38,7 @@
 
           <button
             :disabled="!inStock"
-            class="py-4 ml-3 text-white rounded-md shadow-sm custom-button px-7 text-md shadow-black"
+            class="baseButton custom-button"
             @click="addToCart"
           >
             Add to cart
@@ -69,10 +69,6 @@ const addToCart = () => {
 </script>
 
 <style scoped>
-.custom-button {
-  background-color: #445365;
-}
-
 .custom-button:disabled {
   background-color: #d8d8d8;
 }

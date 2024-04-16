@@ -3,7 +3,7 @@
     <label v-if="label" :for="id" :class="labelClass">{{ label }}</label>
     <select
       :id="id"
-      :class="[baseClass, selectClass]"
+      :class="[baseClass ? baseClass : 'baseInput']"
       :value="modelValue"
       @change="$emit('update:modelValue', $event.target.value)"
       v-bind="$attrs"
@@ -31,7 +31,7 @@ const props = defineProps({
   },
   baseClass: {
     type: String,
-    default: "base-select",
+    default: "",
   },
   selectClass: {
     type: String,

@@ -4,7 +4,7 @@
     <textarea
       :value="modelValue"
       @input="$emit('update:modelValue', $event.target.value)"
-      :class="[BaseInputClass]"
+      :class="['baseArea', BaseInputClass]"
       :id="id"
       v-bind="$attrs"
     ></textarea>

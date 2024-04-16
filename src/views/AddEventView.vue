@@ -9,7 +9,6 @@
         v-model="eventCategory"
         label="Select a category"
         id="eventSelect"
-        :selectClass="customInputStyle"
         :labelClass="customLabelStyle"
       >
         <option
@@ -28,7 +27,6 @@
       <base-input
         v-model="eventTitle"
         type="text"
-        :BaseInputClass="customInputStyle"
         :BaseLabelClass="customLabelStyle"
         label="Title"
         id="eventTitle"
@@ -42,7 +40,6 @@
       <base-input
         v-model="eventLocation"
         type="text"
-        :BaseInputClass="customInputStyle"
         :BaseLabelClass="customLabelStyle"
         label="Location"
         id="eventLocation"
@@ -52,7 +49,6 @@
       <base-input
         v-model="eventDescription"
         type="text"
-        :BaseInputClass="customInputStyle"
         :BaseLabelClass="customLabelStyle"
         label="Description"
         id="eventDescription"
@@ -116,12 +112,7 @@
     </div>
 
     <!-- Submit button -->
-    <button
-      type="button"
-      class="h-[50px] w-[135px] rounded-md bg-gradient-to-r from-teal-400 to-green-400 text-white text-lg font-500 cursor-pointer hover:scale-105 transition-all my-5"
-    >
-      Submit
-    </button>
+    <button type="button" class="baseButton">Submit</button>
     <pre class="text-lg text-black">
 {
   "category": "{{ eventCategory }}",
