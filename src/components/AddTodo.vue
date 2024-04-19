@@ -5,27 +5,15 @@
   </div>
 </template>
 
-<script>
-import { defineComponent } from "vue";
+<script setup>
 import { useTodoStore } from "@/stores/todoStore";
 import BaseInput from "@/components/customInput/BaseInput.vue";
-
-export default defineComponent({
-  components: {
-    BaseInput,
-  },
-  data() {
-    return {
-      newTodo: "",
-    };
-  },
-  methods: {
-    addTodo() {
-      if (this.newTodo.trim() !== "") {
-        useTodoStore().addTodo({ text: this.newTodo, completed: false });
-        this.newTodo = "";
-      }
-    },
-  },
-});
+import { ref } from "vue";
+const newTodo = ref("");
+const addTodo = () => {
+  if (newTodo.value.trim() !== "") {
+    useTodoStore().addTodo({ text: newTodo.value, completed: false });
+    newTodo.value = "";
+  }
+};
 </script>

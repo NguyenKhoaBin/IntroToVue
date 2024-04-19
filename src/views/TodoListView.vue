@@ -10,15 +10,7 @@
   </div>
 </template>
 
-<script>
-import { defineComponent } from "vue";
+<script setup>
 import AddTodo from "@/components/AddTodo.vue";
 import Todos from "@/components/Todos.vue";
-
-export default defineComponent({
-  components: {
-    AddTodo,
-    Todos,
-  },
-});
 </script>

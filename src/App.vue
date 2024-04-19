@@ -1,5 +1,6 @@
 <script setup>
 import { RouterLink, useRoute } from "vue-router";
+import { useAuthStore } from "@/stores/authStore";
 
 const navLinks = [
   { path: "/", label: "Home" },
@@ -9,15 +10,17 @@ const navLinks = [
   { path: "/todo", label: "Todo List" },
   { path: "/event/add", label: "Add Event" },
   { path: "/draggable", label: "Draggable" },
-  { path: "/signIn", label: "SigIn" },
+  { path: "/profile", label: "Profile" },
 ];
 
 const route = useRoute();
+const authStore = useAuthStore();
 </script>
 
 <template>
-  <div>
+  <div class="min-w-full w-fit">
     <nav
+      v-if="authStore.isAuthenticated"
       class="h-[65px] w-full bg-gradient-to-r from-teal-500 shadow-md to-green-500 flex items-center justify-center gap-5 text-lg text-white select-none"
     >
       <RouterLink

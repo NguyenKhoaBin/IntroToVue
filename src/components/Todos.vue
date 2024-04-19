@@ -6,40 +6,33 @@
   >
     <span
       class="flex-1 w-full text-lg text-[#2C3E50] font-[500]"
-      :style="{
-        'text-decoration': todo.completed ? 'line-through' : 'none',
-      }"
+      :style="{ 'text-decoration': todo.completed ? 'line-through' : 'none' }"
     >
       {{ todo.text }}
     </span>
     <i
       @click="completeTodo(index)"
       class="cursor-pointer pi pi-check hover:scale-105 text-[20px]"
-    ></i>
+      >V</i
+    >
     <i
       @click="deleteTodo(index)"
       class="cursor-pointer pi pi-times hover:scale-105 text-[20px] text-[#F92F60]"
-    ></i>
+      >X</i
+    >
   </div>
 </template>
 
-<script>
-import { defineComponent } from "vue";
+<script setup>
 import { useTodoStore } from "@/stores/todoStore";
 
-export default defineComponent({
-  methods: {
-    completeTodo(index) {
-      useTodoStore().completeTodo(index);
-    },
-    deleteTodo(index) {
-      useTodoStore().deleteTodo(index);
-    },
-  },
-  computed: {
-    todos() {
-      return useTodoStore().todos;
-    },
-  },
-});
+const completeTodo = (index) => {
+  useTodoStore().completeTodo(index);
+};
+
+const deleteTodo = (index) => {
+  useTodoStore().deleteTodo(index);
+};
+
+const todos = useTodoStore().todos;
 </script>

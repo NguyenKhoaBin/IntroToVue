@@ -6,8 +6,10 @@ import EventsView from "@/views/EventsView.vue";
 import EventView from "@/views/EventView.vue";
 import TodoListView from "@/views/TodoListView.vue";
 import AddEventView from "@/views/AddEventView.vue";
-import SignInView from "@/views/SignInView.vue";
+import AuthView from "@/views/AuthView.vue";
 import Draggable from "@/views/DraggableView.vue";
+import ProfileView from "@/views/ProfileView.vue";
+
 import { useAuthStore } from "@/stores/authStore";
 
 const routes = [
@@ -21,7 +23,9 @@ const routes = [
   { path: "/event/add", component: AddEventView },
   { path: "/todo", component: TodoListView },
   { path: "/draggable", component: Draggable },
-  { path: "/signin", component: SignInView },
+  { path: "/signin", component: AuthView },
+  { path: "/forgot", component: AuthView },
+  { path: "/profile", component: ProfileView },
 ];
 
 const router = createRouter({
@@ -32,8 +36,12 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const authStore = useAuthStore();
 
-  if (to.path !== "/signin" && !authStore.isAuthenticated) {
-    next("/signin");
+  if (!authStore.isAuthenticated) {
+    if (to.path === "/forgot" || to.path === "/signin") {
+      next();
+    } else {
+      next("/signin");
+    }
   } else {
     next();
   }
