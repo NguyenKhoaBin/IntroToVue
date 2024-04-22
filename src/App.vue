@@ -1,5 +1,5 @@
 <script setup>
-import { RouterLink, useRoute } from "vue-router";
+import { RouterLink, useRoute, useRouter } from "vue-router";
 import { useAuthStore } from "@/stores/authStore";
 
 const navLinks = [
@@ -11,10 +11,16 @@ const navLinks = [
   { path: "/event/add", label: "Add Event" },
   { path: "/draggable", label: "Draggable" },
   { path: "/profile", label: "Profile" },
+  { path: "/signup", label: "SignUp" },
 ];
 
 const route = useRoute();
+const router = useRouter();
 const authStore = useAuthStore();
+function logOut() {
+  authStore.isAuthenticated = false;
+  router.push("/signin");
+}
 </script>
 
 <template>
@@ -35,6 +41,9 @@ const authStore = useAuthStore();
       >
         {{ link.label }}
       </RouterLink>
+      <span class="cursor-pointer hover:underline" @click="logOut"
+        >Log Out</span
+      >
     </nav>
     <RouterView />
   </div>

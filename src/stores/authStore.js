@@ -4,10 +4,7 @@ export const useAuthStore = defineStore({
   id: "auth",
   state: () => ({
     isAuthenticated: false,
-    user: {
-      email: "bin@gmail.com",
-      password: "12345678",
-    },
+    auth: {},
   }),
   actions: {
     login(user) {

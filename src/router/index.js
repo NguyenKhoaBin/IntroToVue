@@ -27,7 +27,6 @@ const routes = [
   { path: "/forgot", component: AuthView },
   { path: "/profile", component: ProfileView },
 ];
-
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,

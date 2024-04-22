@@ -12,11 +12,11 @@
   </div>
 </template>
 
-<script setup>
-import { defineProps } from "vue";
-
-const props = defineProps({
-  isDetailPage: Boolean,
-  selectedEvent: Object,
-});
+<script>
+export default {
+  props: {
+    isDetailPage: Boolean,
+    selectedEvent: Object,
+  },
+};
 </script>

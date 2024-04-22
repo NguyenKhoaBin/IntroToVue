@@ -1,6 +1,8 @@
 <template>
   <div class="flex flex-col items-center gap-10 p-10">
-    <h1 class="text-4xl font-[600] select-none">Events For Good</h1>
+    <h1 class="text-4xl font-[600] select-none">
+      Events For Good
+    </h1>
     <RouterLink
       v-for="event in displayedEvents"
       :key="event.id"
@@ -12,7 +14,9 @@
         <p class="text-center font-[500]">
           {{ event.title }}
         </p>
-        <p class="text-center text-[#423e3e] text-md">@{{ event.time }}</p>
+        <p class="text-center text-[#423e3e] text-md">
+          @{{ event.time }}
+        </p>
       </div>
     </RouterLink>
     <div class="relative w-[290px] transition-all text-lg select-none">
@@ -20,21 +24,19 @@
         v-if="currentPage > 0"
         class="absolute left-0 cursor-pointer hover:scale-105 hover:underline"
         @click="previousPage"
-        >Previous</span
-      >
+      >Previous</span>
       <span
         v-if="currentPage < totalPages - 1"
         class="absolute right-0 cursor-pointer hover:scale-105 hover:underline"
         @click="nextPage"
-        >Next</span
-      >
+      >Next</span>
     </div>
   </div>
 </template>
 
 <script setup>
 import { ref, computed } from "vue";
-import events from "@/data/events";
+import events from "../data/events";
 
 const currentPage = ref(0);
 const pageSize = 2;

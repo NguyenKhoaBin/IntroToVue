@@ -9,6 +9,7 @@
         v-model="eventCategory"
         label="Select a category"
         id="eventSelect"
+        :selectClass="customInputStyle"
         :labelClass="customLabelStyle"
       >
         <option
@@ -27,6 +28,7 @@
       <base-input
         v-model="eventTitle"
         type="text"
+        :BaseInputClass="customInputStyle"
         :BaseLabelClass="customLabelStyle"
         label="Title"
         id="eventTitle"
@@ -40,6 +42,7 @@
       <base-input
         v-model="eventLocation"
         type="text"
+        :BaseInputClass="customInputStyle"
         :BaseLabelClass="customLabelStyle"
         label="Location"
         id="eventLocation"
@@ -49,6 +52,7 @@
       <base-input
         v-model="eventDescription"
         type="text"
+        :BaseInputClass="customInputStyle"
         :BaseLabelClass="customLabelStyle"
         label="Description"
         id="eventDescription"
@@ -60,17 +64,18 @@
     <div class="text-lg">
       <h3 class="text-3xl font-[500] text-black">Are pets allowed?</h3>
       <BaseRadioGroup id="petAllowedRadioGroup" groupClass="pt-5">
-        <BaseRadio id="pet" v-model="isPetsAllowed" name="petOption" value="1"
-          >Yes</BaseRadio
-        >
+        <BaseRadio id="pet" name="petOption" value="1" v-model="isPetsAllowed">
+          Yes
+        </BaseRadio>
         <BaseRadio
           id="noPet"
-          v-model="isPetsAllowed"
           name="petOption"
           value="0"
+          v-model="isPetsAllowed"
           radioLabel="ml-2"
-          >No</BaseRadio
         >
+          No
+        </BaseRadio>
       </BaseRadioGroup>
     </div>
 
@@ -84,16 +89,18 @@
             name="petAgainOption"
             value="1"
             v-model="isPetAgain"
-            >Yes</BaseRadio
           >
+            Yes
+          </BaseRadio>
           <BaseRadio
             id="noPetAgain"
             name="petAgainOption"
-            v-model="isPetAgain"
             value="0"
+            v-model="isPetAgain"
             radioLabel="ml-2"
-            >No</BaseRadio
           >
+            No
+          </BaseRadio>
         </BaseRadioGroup>
       </div>
     </div>
@@ -102,17 +109,22 @@
     <div class="text-lg">
       <h3 class="text-3xl font-[500] text-black">Extras</h3>
       <div class="flex flex-col gap-2 py-3">
-        <BaseCheckbox v-model="isCateringChecked" id="cateringCheckbox"
-          >Catering</BaseCheckbox
-        >
-        <BaseCheckbox v-model="isLiveMusicChecked" id="liveMusicCheckbox"
-          >Live Music</BaseCheckbox
-        >
+        <BaseCheckbox v-model="isCateringChecked" id="cateringCheckbox">
+          Catering
+        </BaseCheckbox>
+        <BaseCheckbox v-model="isLiveMusicChecked" id="liveMusicCheckbox">
+          Live Music
+        </BaseCheckbox>
       </div>
     </div>
 
     <!-- Submit button -->
-    <button type="button" class="baseButton">Submit</button>
+    <button
+      type="button"
+      class="h-[50px] w-[135px] rounded-md bg-gradient-to-r from-teal-400 to-green-400 text-white text-lg font-500 cursor-pointer hover:scale-105 transition-all my-5"
+    >
+      Submit
+    </button>
     <pre class="text-lg text-black">
 {
   "category": "{{ eventCategory }}",
@@ -130,34 +142,58 @@
   </div>
 </template>
 
-<script setup>
-import BaseSelect from "@/components/customInput/BaseSelect.vue";
-import BaseInput from "@/components/customInput/BaseInput.vue";
-import BaseRadio from "@/components/customInput/BaseRadio.vue";
-import BaseRadioGroup from "@/components/customInput/BaseRadioGroup.vue";
-import BaseCheckbox from "@/components/customInput/BaseCheckbox.vue";
+<script>
+import BaseSelect from "../components/customInput/BaseSelect.vue";
+import BaseInput from "../components/customInput/BaseInput.vue";
+import BaseRadio from "../components/customInput/BaseRadio.vue";
+import BaseRadioGroup from "../components/customInput/BaseRadioGroup.vue";
+import BaseCheckbox from "../components/customInput/BaseCheckbox.vue";
 import { ref } from "vue";
 
-const eventTitle = ref("");
-const eventDescription = ref("");
-const eventLocation = ref("");
-const eventCategory = ref("");
-const isPetsAllowed = ref(1);
-const isPetAgain = ref(1);
-const isCateringChecked = ref(0);
-const isLiveMusicChecked = ref(0);
-const customInputStyle =
-  "h-[50px] w-[450px] p-2 text-lg border rounded-sm outline-none";
-const customLabelStyle = "font-[500] cursor-pointer text-lg";
-const categoryOptions = [
-  "Sustainability",
-  "Nature",
-  "Animal Welfare",
-  "Housing",
-  "Education",
-  "Food",
-  "Community",
-];
-</script>
+export default {
+  components: {
+    BaseSelect,
+    BaseInput,
+    BaseRadio,
+    BaseRadioGroup,
+    BaseCheckbox,
+  },
+  setup() {
+    const eventTitle = ref("");
+    const eventDescription = ref("");
+    const eventLocation = ref("");
+    const eventCategory = ref("");
+    const isPetsAllowed = ref(1);
+    const isPetAgain = ref(1);
+    const isCateringChecked = ref(0);
+    const isLiveMusicChecked = ref(0);
+    const customInputStyle =
+      "h-[50px] w-[450px] p-2 text-lg border rounded-sm outline-none";
+    const customLabelStyle = "font-[500] cursor-pointer text-lg";
 
+    const categoryOptions = [
+      "Sustainability",
+      "Nature",
+      "Animal Welfare",
+      "Housing",
+      "Education",
+      "Food",
+      "Community",
+    ];
+    return {
+      eventTitle,
+      eventDescription,
+      eventLocation,
+      customInputStyle,
+      customLabelStyle,
+      eventCategory,
+      isPetsAllowed,
+      isPetAgain,
+      categoryOptions,
+      isCateringChecked,
+      isLiveMusicChecked,
+    };
+  },
+};
+</script>
 <style scoped></style>

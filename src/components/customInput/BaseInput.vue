@@ -5,7 +5,7 @@
       type="text"
       :value="modelValue"
       @input="$emit('update:modelValue', $event.target.value)"
-      :class="[BaseInputClass ? BaseInputClass + 'baseInput' : 'baseInput']"
+      :class="[BaseInputClass]"
       :id="id"
       v-bind="$attrs"
     />

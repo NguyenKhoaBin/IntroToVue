@@ -46,6 +46,9 @@
           class="w-4 h-4 text-[#7A7A7A] absolute top-6 right-5 cursor-pointer"
           @click="toggleInputType"
         />
+        <p class="mt-2 text-[14px] leading-[22px] text-orange-700">
+          {{ errorMessage }}
+        </p>
       </div>
 
       <button
@@ -70,9 +73,10 @@ import { useRouter, RouterLink } from "vue-router";
 import { useAuthStore } from "@/stores/authStore";
 import * as yup from "yup";
 import { ref, computed } from "vue";
+import axios from "axios";
 
 const inputType = ref("password");
-
+const errorMessage = ref("");
 const toggleInputType = () => {
   inputType.value = inputType.value === "password" ? "text" : "password";
 };
@@ -85,23 +89,32 @@ const schema = yup.object({
     .required("Email không được để trống"),
   password: yup
     .string()
-    .min(8, "Mật khẩu phải chứa ít nhất 8 kí tự")
+    .min(6, "Mật khẩu phải chứa ít nhất 6 kí tự")
     .required("Mật khẩu không được để trống"),
 });
 
 function onSubmit(values) {
-  console.log(authStore.user.email);
-  console.log(authStore.user.password);
-  if (
-    values.email !== authStore.user.email ||
-    values.password !== authStore.user.password
-  ) {
-    console.log("sai");
-    return;
-  }
-  authStore.isAuthenticated = true;
+  const loginUrl = "http://hrm-dev.w3suga.com:8282/api/v1/login?is_admin=1";
 
-  router.push("/");
+  const data = {
+    username: values.email,
+    password: values.password,
+  };
+
+  axios
+    .post(loginUrl, data)
+    .then((response) => {
+      authStore.isAuthenticated = true;
+      authStore.auth = response.data;
+      console.log(response.data);
+      router.push("/");
+    })
+    .catch((error) => {
+      if (error.response) {
+        console.error("Error:", error.response.data);
+        errorMessage.value = error.response.data.message;
+      }
+    });
 }
 </script>
 

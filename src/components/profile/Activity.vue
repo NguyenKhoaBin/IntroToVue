@@ -26,7 +26,7 @@
       </button>
     </div>
     <div class="py-5">
-      <table class="w-full">
+      <table class="w-full" v-if="activity.length > 0">
         <thead class="w-full">
           <tr class="flex items-center w-full justify-evenly">
             <th class="w-[2%]"></th>
@@ -58,11 +58,18 @@
           </tr>
         </tbody>
       </table>
+      <p
+        class="text-[18px] leading-[24px] text-center"
+        v-if="activity.length == 0"
+      >
+        Không có hoạt động nào
+      </p>
     </div>
   </div>
 </template>
 <script setup>
 import BaseInput from "@/components/customInput/BaseInput.vue";
+import { array } from "yup";
 const items = [
   {
     name: "timesheets_update",
@@ -90,7 +97,12 @@ const items = [
     time: "16:43, 14/06/2022",
   },
 ];
-defineProps({});
+defineProps({
+  activity: {
+    type: [array],
+    default: false,
+  },
+});
 </script>
 <style scoped>
 .text-thead {

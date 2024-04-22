@@ -151,15 +151,17 @@ const hideInputArea = () => {
 };
 
 const addNewColumn = () => {
-  const newColumn = {
-    name: newColumnName.value,
-    id: idGlobal++,
-    items: [],
-    newTask: "",
-  };
-  columns.value.push(newColumn);
-  newColumnName.value = "";
-  $refs.newColumnNameInput.focus();
+  if (newColumnName.value.trim() !== "") {
+    const newColumn = {
+      name: newColumnName.value,
+      id: ++idGlobal,
+      items: [],
+      newTask: "",
+    };
+    columns.value.push(newColumn);
+    newColumnName.value = "";
+    $refs.newColumnNameInput.focus();
+  }
 };
 </script>
 

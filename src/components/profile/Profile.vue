@@ -17,12 +17,16 @@
     <div class="my-[20px]">
       <base-input
         label="Tên đăng nhập"
-        :modelValue="user.email"
+        :modelValue="user.userName"
         BaseLabelClass="text-[#39455B] font-[500] leading-[22px] text-[14px]"
         BaseInputClass="w-[1197px]  h-[38px] px-[8px]  outline-none py-[10px] text-[#5C6678] border border-[#CDD2DB]"
       />
     </div>
-    <p class="text-[14px] leading-[22px] font-[400]">Đặt lại mật khẩu</p>
+    <p
+      class="text-[14px] leading-[22px] font-[400] cursor-pointer text-[#FAAD1B]"
+    >
+      Đặt lại mật khẩu
+    </p>
     <div class="pt-5 mt-5 w-[83px]">
       <span
         class="flex gap-2 items-center justify-center h-[38px] bg-[#FAAD1B] w-full px-1 text-white py-1/2 cursor-pointer"
