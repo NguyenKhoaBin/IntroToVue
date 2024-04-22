@@ -73,11 +73,11 @@ const headers = {
 onMounted(async () => {
   try {
     const res_profile = await axios.get(
-      "http://hrm-dev.w3suga.com:8282/api/v1/admin/me",
+      "https://hrm-dev.w3suga.com:8282/api/v1/admin/me",
       { headers }
     );
     const res_activity = await axios.get(
-      "http://hrm-dev.w3suga.com:8282/api/v1/admin/me/activity-logs?limit=10&page=1&access_mode=1&q=create",
+      "https://hrm-dev.w3suga.com:8282/api/v1/admin/me/activity-logs?limit=10&page=1&access_mode=1&q=create",
       { headers }
     );
     const userData = res_profile.data;

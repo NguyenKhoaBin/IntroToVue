@@ -94,7 +94,7 @@ const schema = yup.object({
 });
 
 function onSubmit(values) {
-  const loginUrl = "http://hrm-dev.w3suga.com:8282/api/v1/login?is_admin=1";
+  const loginUrl = "https://hrm-dev.w3suga.com:8282/api/v1/login?is_admin=1";
 
   const data = {
     username: values.email,
