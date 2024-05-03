@@ -1,52 +1,17 @@
-<template>
-  <div class="flex flex-col items-center gap-10 p-10">
-    <h1 class="text-4xl font-[600] select-none">
-      Events For Good
-    </h1>
-    <RouterLink
-      v-for="event in displayedEvents"
-      :key="event.id"
-      :to="`/event/${event.id}`"
-    >
-      <div
-        class="items-center p-5 space-y-2 text-xl transition-all border-2 cursor-pointer hover:scale-110 min-w-[290px] select-none"
-      >
-        <p class="text-center font-[500]">
-          {{ event.title }}
-        </p>
-        <p class="text-center text-[#423e3e] text-md">
-          @{{ event.time }}
-        </p>
-      </div>
-    </RouterLink>
-    <div class="relative w-[290px] transition-all text-lg select-none">
-      <span
-        v-if="currentPage > 0"
-        class="absolute left-0 cursor-pointer hover:scale-105 hover:underline"
-        @click="previousPage"
-      >Previous</span>
-      <span
-        v-if="currentPage < totalPages - 1"
-        class="absolute right-0 cursor-pointer hover:scale-105 hover:underline"
-        @click="nextPage"
-      >Next</span>
-    </div>
-  </div>
-</template>
-
-<script setup>
+<script setup lang="ts">
 import { ref, computed } from "vue";
 import events from "../data/events";
+import { NSpace } from "naive-ui";
+import { Event } from "../types/type";
+const currentPage = ref<number>(0);
+const pageSize: number = 2;
 
-const currentPage = ref(0);
-const pageSize = 2;
-
-const displayedEvents = computed(() => {
+const displayedEvents = computed<Event[]>(() => {
   const startIndex = currentPage.value * pageSize;
   return events.slice(startIndex, startIndex + pageSize);
 });
 
-const totalPages = computed(() => Math.ceil(events.length / pageSize));
+const totalPages = computed<number>(() => Math.ceil(events.length / pageSize));
 
 const nextPage = () => {
   if (currentPage.value < totalPages.value - 1) {
@@ -60,3 +25,48 @@ const previousPage = () => {
   }
 };
 </script>
+
+<template>
+  <n-flex
+    justify="center"
+    vertical
+    align="center"
+    class="gap-10 p-10 select-none"
+  >
+    <n-h1 class="text-4xl font-[600]"> Events For Good </n-h1>
+    <RouterLink
+      v-for="event in displayedEvents"
+      :key="event.id"
+      :to="`/event/${event.id}`"
+    >
+      <n-space
+        align="center"
+        vertical
+        class="p-5 space-y-2 transition-all border-2 cursor-pointer hover:scale-110 min-w-[290px]"
+      >
+        <n-text class="text-center text-xl font-[500]" strong>
+          {{ event.title }}
+        </n-text>
+        <n-text class="text-center text-[#423e3e] text-xl">
+          @{{ event.time }}
+        </n-text>
+      </n-space>
+    </RouterLink>
+    <div class="relative w-[290px] transition-all text-lg">
+      <n-text
+        v-if="currentPage > 0"
+        class="absolute left-0 cursor-pointer hover:scale-105 hover:underline"
+        @click="previousPage"
+      >
+        Previous
+      </n-text>
+      <n-text
+        v-if="currentPage < totalPages - 1"
+        class="absolute right-0 cursor-pointer hover:scale-105 hover:underline"
+        @click="nextPage"
+      >
+        Next
+      </n-text>
+    </div>
+  </n-flex>
+</template>

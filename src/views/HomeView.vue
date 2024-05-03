@@ -1,95 +1,98 @@
+<script setup lang="ts">
+import { ref, computed } from "vue";
+import { NImage, NButton, NText, NFlex, NSpace, NUl, NLi, NH1 } from "naive-ui";
+import socksGreen from "@/assets/images/socks_green.jpg";
+import socksBlue from "@/assets/images/socks_blue.jpg";
+
+const imageUrl = ref<string>(socksGreen);
+const inStock = ref<boolean>(true);
+const total = ref<number>(0);
+
+const updateStockAndUrl = (value: boolean) => {
+  inStock.value = value;
+  imageUrl.value = inStock.value ? socksGreen : socksBlue;
+};
+
+const addToCart = () => {
+  total.value++;
+};
+
+const stockStatus = computed<string>(() => {
+  return inStock.value ? "In Stock" : "Out of Stock";
+});
+
+const buttonColors = computed<string[]>(() => {
+  return inStock.value ? ["#258A00", "#0000FF"] : ["#d8d8d8", "#d8d8d8"];
+});
+</script>
+
 <template>
-  <div>
+  <div class="h-full select-none">
     <div class="bg-[#F2F2F2] h-full min-h-screen-navbar px-20">
-      <div class="flex w-full h-full py-12">
-        <div
-          class="h-[420px] w-[430px] p-4 bg-[#F2F2F2] border-gray-300 border-solid border-2 items-center"
+      <n-flex class="py-12">
+        <n-space
+          class="p-3 border border-solid"
+          align="center"
+          justify="center"
         >
-          <img
-            :src="`${imageUrl}`"
+          <n-image
+            :src="imageUrl"
             alt="Stock"
-            class="w-full h-full"
-          >
-        </div>
+            width="430"
+            height="420"
+            object-fit="cover"
+          />
+        </n-space>
         <div class="w-full flex-1 space-y-3 pl-[60px]">
-          <div class="flex items-end justify-between">
-            <h1 class="text-5xl font-bold text">
-              Vue Mastery Socks
-            </h1>
-            <div
-              class="h-[90px] w-[130px] items-center flex bg-white border justify-center text-xl font-[400]"
+          <n-space align="end" justify="space-between">
+            <n-h1 class="text-5xl font-bold text"> Vue Mastery Socks </n-h1>
+
+            <n-space
+              class="bg-white border text-xl font-[400] h-[90px] w-[120px]"
+              align="center"
+              justify="center"
             >
-              <span>Cart({{ total }})</span>
-            </div>
-          </div>
-          <div class="text-2xl font-[450]">
-            <p v-if="inStock">
-              In Stock
-            </p>
-            <p v-else>
-              Out of Stock
-            </p>
-          </div>
-          <p class="text-2xl font-[450]">
-            Shipping: Free
-          </p>
-          <ul class="ml-8 text-lg">
-            <li>80% cotton</li>
-            <li>20% polyester</li>
-            <li>Gender-neutral</li>
-          </ul>
+              <n-text>Cart({{ total }})</n-text>
+            </n-space>
+          </n-space>
+          <n-space vertical size="medium" class="text-2xl font-[400]">
+            <n-text>{{ stockStatus }}</n-text>
+          </n-space>
+          <n-text class="text-2xl font-[450]"> Shipping: Free </n-text>
+          <n-ul class="ml-8 text-lg">
+            <n-li>80% cotton</n-li>
+            <n-li>20% polyester</n-li>
+            <n-li>Gender-neutral</n-li>
+          </n-ul>
 
-          <span
-            class="h-[50px] w-[50px] rounded-full bg-[#258A00] block"
-            @mouseenter="updateStockAndUrl(true)"
-          />
-          <span
-            class="h-[50px] w-[50px] rounded-full bg-[#0000FF] block"
-            @mouseenter="updateStockAndUrl(false)"
-          />
+          <n-space vertical size="medium">
+            <n-button
+              size="large"
+              :color="buttonColors[0]"
+              :circle="true"
+              @mouseenter="updateStockAndUrl(true)"
+            />
+            <n-button
+              size="large"
+              :color="buttonColors[1]"
+              :circle="true"
+              @mouseenter="updateStockAndUrl(false)"
+            />
 
-          <button
-            :disabled="!inStock"
-            class="py-4 ml-3 text-white rounded-md shadow-sm custom-button px-7 text-md shadow-black"
-            @click="addToCart"
-          >
-            Add to cart
-          </button>
+            <n-button
+              :disabled="!inStock"
+              class="baseButton"
+              type="default"
+              @click="addToCart"
+            >
+              Add to cart
+            </n-button>
+          </n-space>
         </div>
-      </div>
+      </n-flex>
     </div>
   </div>
 </template>
-<script>
-import socksGreen from "../assets/socks_green.jpg";
-import socksBlue from "../assets/socks_blue.jpg";
-
-export default {
-  data() {
-    return {
-      imageUrl: socksGreen,
-      inStock: true,
-      total: 0,
-    };
-  },
-  computed: {
-    isFormIncomplete() {
-      return (
-        !this.formData.name || !this.formData.review || !this.formData.rating
-      );
-    },
-  },
-  methods: {
-    updateStockAndUrl(value) {
-      this.inStock = value;
-      this.imageUrl = this.inStock ? socksGreen : socksBlue;
-    },
-    addToCart() {
-      this.total++;
-    },
-  },
-};
-</script>
 
 <style scoped>
 .custom-button {
@@ -99,6 +102,7 @@ export default {
 .custom-button:disabled {
   background-color: #d8d8d8;
 }
+
 .min-h-screen-navbar {
   min-height: calc(100vh - 65px);
 }

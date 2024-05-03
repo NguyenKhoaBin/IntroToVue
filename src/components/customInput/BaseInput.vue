@@ -1,29 +1,26 @@
-<template>
-  <div>
-    <label v-if="label" :class="[BaseLabelClass]" :for="id">{{ label }}</label>
-    <input
-      type="text"
-      :value="modelValue"
-      @input="$emit('update:modelValue', $event.target.value)"
-      :class="[BaseInputClass]"
-      :id="id"
-      v-bind="$attrs"
-    />
-  </div>
-</template>
+<script setup lang="ts">
+import { NInput } from "naive-ui";
 
-<script setup>
-defineProps({
-  label: {
-    type: [String, Boolean],
-    default: false,
-  },
-  modelValue: {
-    type: String,
-    default: "",
-  },
-  id: String,
-  BaseInputClass: String,
-  BaseLabelClass: String,
-});
+const {
+  modelValue = "",
+  bordered = true,
+  BaseInputClass = "",
+  type = "text",
+} = defineProps<{
+  modelValue?: string;
+  bordered: boolean;
+  BaseInputClass?: string;
+  type?: "text" | "textarea" | "password" | undefined;
+}>();
 </script>
+
+<template>
+  <n-input
+    :value="modelValue"
+    :class="[BaseInputClass]"
+    :bordered="bordered"
+    v-bind="$attrs"
+    :type="type"
+    @update:value="$emit('update:modelValue', $event)"
+  />
+</template>

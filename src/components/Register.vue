@@ -1,21 +1,16 @@
+<script setup lang="ts">
+import { defineProps } from "vue";
+
+interface Props {
+  register: Function;
+}
+
+const props = defineProps<Props>();
+</script>
+
 <template>
   <div class="text-center">
-    <p class="text-lg">
-      Register for the event here
-    </p>
-    <button
-      class="border px-1 rounded-sm bg-[#E5E5E5] border-[#000] hover:bg-opacity-75 transition-all select-none"
-      @click="register"
-    >
-      Register Me
-    </button>
+    <n-text class="block my-2 text-lg"> Register for the event here </n-text>
+    <n-button @click="props.register"> Register Me </n-button>
   </div>
 </template>
-
-<script>
-export default {
-  props: {
-    register: Function,
-  },
-};
-</script>

@@ -1,3 +1,17 @@
+<script setup lang="ts">
+import { useTodoStore } from "../stores/todoStore";
+
+const completeTodo = (index: number) => {
+  useTodoStore().completeTodo(index);
+};
+
+const deleteTodo = (index: number) => {
+  useTodoStore().deleteTodo(index);
+};
+
+const todos = useTodoStore().todos;
+</script>
+
 <template>
   <div
     v-for="(todo, index) in todos"
@@ -11,28 +25,12 @@
       {{ todo.text }}
     </span>
     <i
-      @click="completeTodo(index)"
       class="cursor-pointer pi pi-check hover:scale-105 text-[20px]"
-      >V</i
-    >
+      @click="completeTodo(index)"
+    />
     <i
-      @click="deleteTodo(index)"
       class="cursor-pointer pi pi-times hover:scale-105 text-[20px] text-[#F92F60]"
-      >X</i
-    >
+      @click="deleteTodo(index)"
+    />
   </div>
 </template>
-
-<script setup>
-import { useTodoStore } from "@/stores/todoStore";
-
-const completeTodo = (index) => {
-  useTodoStore().completeTodo(index);
-};
-
-const deleteTodo = (index) => {
-  useTodoStore().deleteTodo(index);
-};
-
-const todos = useTodoStore().todos;
-</script>

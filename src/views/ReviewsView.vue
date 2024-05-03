@@ -1,112 +1,112 @@
+<script setup lang="ts">
+import { ref, computed } from "vue";
+import { NText, NFlex } from "naive-ui";
+import BaseInput from "../components/customInput/BaseInput.vue";
+import BaseSelect from "../components/customInput/BaseSelect.vue";
+
+interface Review {
+  name: string;
+  review: string;
+  rating: string;
+}
+
+const reviews = ref<Review[]>([]);
+const formData = ref<Review>({
+  name: "",
+  review: "",
+  rating: "1",
+});
+
+const options = [
+  { label: "1", value: "1" },
+  { label: "2", value: "2" },
+  { label: "3", value: "3" },
+  { label: "4", value: "4" },
+  { label: "5", value: "5" },
+];
+
+const isFormIncomplete = computed(() => {
+  return (
+    !formData.value.name || !formData.value.review || !formData.value.rating
+  );
+});
+
+const handleSubmit = () => {
+  if (isFormIncomplete.value) {
+    alert("Review is incomplete. Please fill out every field.");
+    return;
+  }
+  reviews.value.push({ ...formData.value });
+  formData.value = {
+    name: "",
+    review: "",
+    rating: "1",
+  };
+};
+</script>
+
 <template>
-  <div class="flex flex-col items-center">
+  <div class="flex flex-col items-center select-none">
     <div
       v-if="reviews.length > 0"
       class="w-[470px] py-[45px] px-4 bg-white border-2 my-5"
     >
-      <p class="text-3xl font-[500] mb-5">Reviews:</p>
-      <div v-for="(review, index) in reviews" :key="index" class="mt-3">
-        <p class="px-8 text-lg">
+      <n-text class="text-3xl font-[500] block mb-5"> Reviews: </n-text>
+      <n-flex
+        v-for="(review, index) in reviews"
+        :key="index"
+        vertical
+        class="mt-3"
+      >
+        <n-text class="text-lg">
           {{ review.name }} gave this {{ review.rating }} stars
-        </p>
-        <p class="px-8 text-lg">" {{ review.review }} "</p>
-      </div>
+        </n-text>
+        <n-text class="block text-lg"> " {{ review.review }} " </n-text>
+      </n-flex>
     </div>
 
     <div class="w-[470px] py-[45px] px-4 bg-white border-2 my-5">
-      <p class="text-3xl font-[500] mb-5">Leave a review</p>
+      <n-text class="text-3xl font-[500] mb-5 block"> Leave a review </n-text>
       <form action="" class="space-y-3">
-        <base-input
-          id="name"
+        <n-text class="block select-none"> Name : </n-text>
+        <BaseInput
           v-model="formData.name"
           type="text"
+          :bordered="true"
           name="name"
-          label="Name"
-          BaseLabelClass="block"
-          BaseInputClass="w-full p-2 border"
+          BaseInputClass="w-full p-2"
+          placeholder=" "
         />
+        <n-text class="block select-none"> Review: </n-text>
 
-        <BaseInputArea
-          id="review"
+        <BaseInput
           v-model="formData.review"
+          type="textarea"
           name="review"
-          label="Review:"
+          :bordered="true"
           rows="4"
           cols="50"
           BaseInputClass="w-full p-2 border"
-          BaseLabelClass="block"
+          placeholder=" "
         />
+
+        <n-text class="block select-none"> Rating: </n-text>
 
         <BaseSelect
           v-model="formData.rating"
-          id="rating"
-          baseClass="w-full p-2 border"
-          label="Rating:"
-          labelClass="block"
-        >
-          <option
-            v-for="rating in [1, 2, 3, 4, 5]"
-            :key="rating"
-            :value="rating"
-          >
-            {{ rating }}
-          </option>
-        </BaseSelect>
+          :options="options"
+          base-class="w-full border"
+        />
 
-        <button
-          type="button"
-          class="bg-[#435264] block mx-auto h-[60px] w-[160px] text-center rounded-md text-white text-lg"
+        <n-button
+          type="primary"
+          class="w-full baseButton"
+          :disabled="isFormIncomplete"
           @click="handleSubmit"
         >
           Submit
-        </button>
+        </n-button>
       </form>
     </div>
   </div>
 </template>
-<script>
-import BaseInput from "../components/customInput/BaseInput.vue";
-import BaseSelect from "../components/customInput/BaseSelect.vue";
-import BaseInputArea from "../components/customInput/BaseInputArea.vue";
-
-export default {
-  components: {
-    BaseSelect,
-    BaseInput,
-    BaseInputArea,
-  },
-  data() {
-    return {
-      reviews: [],
-      formData: {
-        name: "",
-        review: "",
-        rating: "1",
-      },
-    };
-  },
-  computed: {
-    isFormIncomplete() {
-      return [
-        this.formData.name,
-        this.formData.review,
-        this.formData.rating,
-      ].some((field) => !field);
-    },
-  },
-  methods: {
-    handleSubmit() {
-      if (this.isFormIncomplete) {
-        alert("Review is incomplete. Please fill out every field.");
-        return;
-      }
-      this.reviews.push({
-        name: this.formData.name,
-        review: this.formData.review,
-        rating: this.formData.rating,
-      });
-      // console.log(this.reviews);
-    },
-  },
-};
-</script>

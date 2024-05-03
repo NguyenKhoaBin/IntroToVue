@@ -1,63 +1,144 @@
+<script setup lang="ts">
+import { useRouter, RouterLink } from "vue-router";
+import { useAuthStore } from "../../stores/authStore";
+import { ref, computed } from "vue";
+import { NButton, NForm, NFormItem, NInput, NText } from "naive-ui";
+import axios from "axios";
+
+interface LoginFormModel {
+  email: string | null;
+  password: string | null;
+}
+
+const formRef = ref<HTMLElement | null>(null);
+const modelRef = ref<LoginFormModel>({
+  email: null,
+  password: null,
+});
+const model = computed(() => modelRef.value);
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+const rules = {
+  email: [
+    {
+      required: true,
+      validator(rule: any, value: string | null) {
+        if (!value) {
+          return new Error("Email không được trống");
+        } else if (!emailRegex.test(value)) {
+          return new Error("Email không đúng định dạng");
+        }
+        return true;
+      },
+      trigger: ["input", "blur"],
+    },
+  ],
+  password: [
+    {
+      required: true,
+      validator(rule: any, value: string | null) {
+        if (!value) {
+          return new Error("Mật khẩu không được trống");
+        } else if (value.length < 6) {
+          return new Error("Mật khẩu phải chứa ít nhất 6 kí tự");
+        }
+        return true;
+      },
+      trigger: ["input", "blur"],
+    },
+  ],
+};
+
+const errorMessage = ref("");
+
+const router = useRouter();
+const authStore = useAuthStore();
+const loading = ref(false);
+
+function onSubmit() {
+  loading.value = true;
+  const loginUrl = "http://hrm-dev.w3suga.com:8282/api/v1/login?is_admin=1";
+
+  const data = {
+    username: model.value.email,
+    password: model.value.password,
+  };
+
+  axios
+    .post(loginUrl, data)
+    .then((response) => {
+      authStore.isAuthenticated = true;
+      authStore.login(response.data);
+      loading.value = false;
+      router.push("/");
+    })
+    .catch((error) => {
+      if (error.response) {
+        console.error("Error:", error.response.data);
+        errorMessage.value = error.response.data.message;
+        loading.value = false;
+      }
+    });
+}
+</script>
+
 <template>
   <div
     class="bg-[#fff] w-[560px] absolute h-fit min-h-[740px] top-[80px] left-[785px] rounded-[15px] p-[50px] boxShadow"
   >
     <img
-      src="@/assets/SmallLogo.png"
+      src="@/assets/images/SmallLogo.png"
       alt="SmallLogo"
       class="w-[104px] h-[24.77px] text-[#010101]"
     />
-    <h3
+    <n-h3
       class="mt-[92.23px] mb-[70px] text-[#1D1D1D] font-bold text-4xl leading-[54px] text-left"
     >
       Welcome!
-    </h3>
+    </n-h3>
 
-    <VForm :validation-schema="schema" @submit="onSubmit">
-      <div class="">
-        <VField
-          name="email"
-          type="email"
+    <n-form
+      ref="formRef"
+      :model="model"
+      :rules="rules"
+      @submit.prevent="onSubmit"
+    >
+      <n-form-item path="email">
+        <n-input
+          v-model:value="model.email"
+          type="text"
+          class="!w-[460px] h-[60px] items-center font-[450] border border-solid border-[#9F9F9F] outline-none"
           placeholder="Email của bạn"
-          class="baseInput"
+          @keydown.enter.prevent
         />
-
-        <ErrorMessage name="email" class="block mt-2 text-orange-700" />
-      </div>
-      <div class="mt-[20px] mb-[60px] relative">
-        <VField
-          name="password"
-          :type="inputType"
+      </n-form-item>
+      <n-form-item path="password" class="-mt-6">
+        <n-input
+          v-model:value="model.password"
+          type="password"
+          class="!w-[460px] h-[60px] items-center font-[450] border border-solid border-[#9F9F9F] outline-none"
           placeholder="Mật khẩu"
-          class="baseInput"
+          show-password-on="mousedown"
+          @keydown.enter.prevent
         />
-        <ErrorMessage name="password" class="block mt-2 text-orange-700" />
-        <img
-          v-if="inputType == 'password'"
-          src="@/assets/hide.png"
-          alt="hide"
-          class="w-4 h-4 text-[#7A7A7A] absolute top-6 right-5 cursor-pointer"
-          @click="toggleInputType"
-        />
-        <img
-          v-if="inputType !== `password`"
-          src="@/assets/icon_Eye-open.png"
-          alt="hide"
-          class="w-4 h-4 text-[#7A7A7A] absolute top-6 right-5 cursor-pointer"
-          @click="toggleInputType"
-        />
-        <p class="mt-2 text-[14px] leading-[22px] text-orange-700">
-          {{ errorMessage }}
-        </p>
-      </div>
-
-      <button
-        type="submit"
-        class="w-[460px] h-[60px] py-[14px] px-[30px] gap-[10px] rounded-[4px] bg-[#FAAD1B] shadow-md text-[18px] leading-[20px] font-[600] buttonShadow"
+      </n-form-item>
+      <n-text class="text-orange-400">
+        {{ errorMessage }}
+      </n-text>
+      <n-button
+        attr-type="submit"
+        :loading="loading"
+        class="baseButton w-[460px] mt-[45px]"
+        :disabled="
+          model.email == null ||
+          !emailRegex.test(model.email) ||
+          model.password == null ||
+          !(model.password && model.password.length >= 6)
+        "
       >
         Đăng nhập
-      </button>
-    </VForm>
+      </n-button>
+    </n-form>
 
     <RouterLink
       to="/forgot"
@@ -67,56 +148,6 @@
     </RouterLink>
   </div>
 </template>
-<script setup>
-import { Field as VField, Form as VForm, ErrorMessage } from "vee-validate";
-import { useRouter, RouterLink } from "vue-router";
-import { useAuthStore } from "@/stores/authStore";
-import * as yup from "yup";
-import { ref, computed } from "vue";
-import axios from "axios";
-
-const inputType = ref("password");
-const errorMessage = ref("");
-const toggleInputType = () => {
-  inputType.value = inputType.value === "password" ? "text" : "password";
-};
-const router = useRouter();
-const authStore = useAuthStore();
-const schema = yup.object({
-  email: yup
-    .string()
-    .email("Email không đúng định dạng")
-    .required("Email không được để trống"),
-  password: yup
-    .string()
-    .min(6, "Mật khẩu phải chứa ít nhất 6 kí tự")
-    .required("Mật khẩu không được để trống"),
-});
-
-function onSubmit(values) {
-  const loginUrl = "http://hrm-dev.w3suga.com:8282/api/v1/login?is_admin=1";
-
-  const data = {
-    username: values.email,
-    password: values.password,
-  };
-
-  axios
-    .post(loginUrl, data)
-    .then((response) => {
-      authStore.isAuthenticated = true;
-      authStore.auth = response.data;
-      console.log(response.data);
-      router.push("/");
-    })
-    .catch((error) => {
-      if (error.response) {
-        console.error("Error:", error.response.data);
-        errorMessage.value = error.response.data.message;
-      }
-    });
-}
-</script>
 
 <style scoped>
 .boxShadow {

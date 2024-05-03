@@ -1,7 +1,10 @@
 <template>
-  <div class="space-y-2 text-center">
-    <p class="text-lg">
+  <n-space
+    align="center"
+    justify="center"
+  >
+    <n-text class="text-lg">
       Edit the event here
-    </p>
-  </div>
+    </n-text>
+  </n-space>
 </template>

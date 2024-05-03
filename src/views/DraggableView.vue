@@ -1,88 +1,25 @@
-<template>
-  <div
-    class="bg-[#38A89D] h-full w-full min-h-screen py-10 select-none relative flex gap-2"
-  >
-    <div>
-      <div class="flex gap-2">
-        <div
-          class="flex flex-col p-3 h-fit max-w-[350px] w-full rounded-md bg-[#DAE1E7] mx-2"
-          v-for="column in columns"
-          :key="column.id"
-        >
-          <h3 class="text-lg font-[500]">{{ column.name }}</h3>
-          <draggable
-            :list="column.items"
-            :group="{ name: 'columns', pull: pullFunction }"
-            @start="start"
-            item-key="id"
-          >
-            <template #item="{ element }">
-              <div
-                class="p-3 m-1 text-center bg-white rounded-md cursor-pointer list-group-item"
-                @click="showInputArea(element)"
-              >
-                <p class="text-lg font-[500]">{{ element.name }}</p>
-                <p>{{ element.content }}</p>
-              </div>
-            </template>
-          </draggable>
-          <BaseInput
-            v-model="column.newTask"
-            type="text"
-            BaseInputClass="h-[48px] w-[320px] px-3 text-lg mx-1 rounded-md bg-[#DAE1E7] select-none"
-            placeholder="+ Enter New Task"
-            @keyup.enter="addNewTask(column)"
-          />
-        </div>
-      </div>
-
-      <!-- Overlay -->
-      <div v-if="showOverlay" class="overlay" @click="addContentToTask"></div>
-
-      <!-- Task Input Area -->
-      <div v-if="showInput" class="z-50 task-input">
-        <div
-          class="w-[700px] h-fit rounded-md bg-white absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-5 text-lg"
-        >
-          <h1 class="font-[500] text-xl my-5">{{ selectedTask.name }}</h1>
-          <BaseInputArea
-            v-model="inputValue"
-            id="review"
-            name="review"
-            rows="8"
-            cols="50"
-            BaseInputClass="w-full p-2"
-          />
-        </div>
-      </div>
-    </div>
-
-    <!-- Add new column -->
-
-    <div
-      class="flex flex-col p-3 h-fit max-w-[350px] w-full rounded-md bg-[#DAE1E7] mx-2"
-    >
-      <BaseInput
-        ref="newColumnNameInput"
-        v-model="newColumnName"
-        type="text"
-        BaseInputClass="h-[48px] w-[320px] px-3 text-lg mx-1 rounded-md bg-[#FFF] select-none"
-        placeholder="New Column Name"
-        @keyup.enter="addNewColumn"
-      />
-    </div>
-  </div>
-</template>
-
-<script setup>
-import { ref } from "vue";
+<script setup lang="ts">
 import draggable from "vuedraggable";
-import BaseInput from "@/components/customInput/BaseInput.vue";
-import BaseInputArea from "@/components/customInput/BaseInputArea.vue";
+import { ref, computed, Ref } from "vue";
+import BaseInput from "../components/customInput/BaseInput.vue";
+import BaseInputArea from "../components/customInput/BaseInputArea.vue";
 
 let idGlobal = 8;
 
-const columns = ref([
+interface Task {
+  name: string;
+  id: number;
+  content: string;
+}
+
+interface Column {
+  name: string;
+  id: number;
+  items: Task[];
+  newTask: string;
+}
+
+const columns = ref<Column[]>([
   {
     name: "todo",
     id: 1,
@@ -110,19 +47,19 @@ const columns = ref([
 const controlOnStart = ref(true);
 const showInput = ref(false);
 const showOverlay = ref(false);
-const selectedTask = ref({});
+const selectedTask = ref<Task>({ name: "", id: 0, content: "" });
 const inputValue = ref("");
 const newColumnName = ref("");
 
-const pullFunction = () => {
+const pullFunction = (): string | boolean => {
   return controlOnStart.value ? "clone" : true;
 };
 
-const start = ({ originalEvent }) => {
+const start = ({ originalEvent }: { originalEvent: MouseEvent }): void => {
   controlOnStart.value = originalEvent.ctrlKey;
 };
 
-const addNewTask = (column) => {
+const addNewTask = (column: Column): void => {
   if (column.newTask.trim() !== "") {
     column.items.push({
       name: column.newTask,
@@ -133,26 +70,28 @@ const addNewTask = (column) => {
   }
 };
 
-const showInputArea = (task) => {
+const showInputArea = (task: Task): void => {
   selectedTask.value = task;
   showInput.value = true;
   showOverlay.value = true;
 };
 
-const addContentToTask = () => {
+const addContentToTask = (): void => {
   selectedTask.value.content = inputValue.value;
   inputValue.value = "";
   hideInputArea();
 };
 
-const hideInputArea = () => {
+const hideInputArea = (): void => {
   showInput.value = false;
   showOverlay.value = false;
 };
 
-const addNewColumn = () => {
+const newColumnNameInputRef: Ref<HTMLInputElement | null> = ref(null);
+
+const addNewColumn = (): void => {
   if (newColumnName.value.trim() !== "") {
-    const newColumn = {
+    const newColumn: Column = {
       name: newColumnName.value,
       id: ++idGlobal,
       items: [],
@@ -160,10 +99,96 @@ const addNewColumn = () => {
     };
     columns.value.push(newColumn);
     newColumnName.value = "";
-    $refs.newColumnNameInput.focus();
+    newColumnNameInputRef.value?.focus();
   }
 };
 </script>
+
+<template>
+  <div
+    class="bg-[#38A89D] h-full w-full min-h-screen py-10 select-none relative flex gap-2"
+  >
+    <div class="w-full">
+      <div class="flex gap-2">
+        <div
+          v-for="column in columns"
+          :key="column.id"
+          class="flex flex-col p-3 h-fit max-w-[350px] w-full rounded-md bg-[#DAE1E7] mx-2"
+        >
+          <n-h3 class="text-lg font-[500]">
+            {{ column.name }}
+          </n-h3>
+          <draggable
+            :list="column.items"
+            :group="{ name: 'columns', pull: pullFunction }"
+            item-key="id"
+            @start="start"
+          >
+            <template #item="{ element }">
+              <div
+                class="p-3 m-1 text-center bg-white rounded-md cursor-pointer list-group-item"
+                @click="showInputArea(element)"
+              >
+                <n-text class="text-lg font-[500] block">
+                  {{ element.name }}
+                </n-text>
+                <n-text class="block">
+                  {{ element.content }}
+                </n-text>
+              </div>
+            </template>
+          </draggable>
+          <BaseInput
+            v-model="column.newTask"
+            type="text"
+            :bordered="false"
+            BaseInputClass="h-[48px] !w-[350px] px-3 text-lg mx-1 rounded-md bg-[#DAE1E7] select-none"
+            placeholder="+ Enter New Task"
+            @keyup.enter="addNewTask(column)"
+          />
+        </div>
+      </div>
+
+      <!-- Overlay -->
+      <div v-if="showOverlay" class="overlay" @click="addContentToTask" />
+
+      <!-- Task Input Area -->
+      <div v-if="showInput" class="z-50 task-input">
+        <div
+          class="w-[700px] h-fit rounded-md bg-white absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-5 text-lg"
+        >
+          <n-h1 class="font-[500] text-xl my-5">
+            {{ selectedTask.name }}
+          </n-h1>
+          <BaseInputArea
+            id="review"
+            v-model="inputValue"
+            name="review"
+            rows="8"
+            cols="50"
+            BaseInputClass="w-full p-2"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Add new column -->
+
+    <div
+      class="flex flex-col p-3 h-fit max-w-[350px] w-full rounded-md bg-[#DAE1E7] mx-2"
+    >
+      <BaseInput
+        ref="newColumnNameInput"
+        :bordered="false"
+        v-model="newColumnName"
+        type="text"
+        BaseInputClass="h-[48px] w-[320px] px-3 text-lg mx-1 rounded-md bg-[#FFF] select-none"
+        placeholder="New Column Name"
+        @keyup.enter="addNewColumn"
+      />
+    </div>
+  </div>
+</template>
 
 <style>
 .overlay {

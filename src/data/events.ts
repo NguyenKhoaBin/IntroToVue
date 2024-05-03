@@ -1,4 +1,4 @@
-const events = [
+const data = [
   {
     title: "Cat Adoption Day",
     time: "12:00 on January 28 ,2022",
@@ -43,4 +43,4 @@ const events = [
   },
 ];
 
-export default events;
+export default data;

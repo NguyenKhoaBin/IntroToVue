@@ -1,58 +1,13 @@
-<template>
-  <div class="h-full w-full p-[30px] select-none">
-    <!-- -- -->
-    <div class="h-[108px] w-[357px] flex">
-      <img
-        :src="user.avt"
-        alt="avatar"
-        class="h-[100px] w-[100px] rounded-[5px]"
-      />
-      <div class="py-[22px] pl-[32px]">
-        <p class="font-[500] text-[22px] leading-[30px] text-[#39455B]">
-          {{ user.firstName + " " + user.lastName }}
-        </p>
-        <p class="leading-[22px] text-[14px] font-[400] text-[#80899A]">
-          {{ user.email }}
-        </p>
-      </div>
-    </div>
-    <!-- -- -->
-    <div class="w-full my-[30px] border-solid border-b-[3px] h-full py-[6px]">
-      <span
-        class="tab"
-        @click="currentTab = 'profile'"
-        :class="{ active: currentTab === 'profile' }"
-      >
-        Quản lí tài khoản
-      </span>
-      <span
-        class="tab"
-        @click="currentTab = 'activity'"
-        :class="{ active: currentTab === 'activity' }"
-      >
-        Hoạt động của tôi
-      </span>
-    </div>
-    <!-- --- -->
-    <component
-      :is="currentTab === 'profile' ? Profile : Activity"
-      :user="user"
-      :activity="activity"
-    />
-    <!-- --- -->
-  </div>
-</template>
-
-<script setup>
-// import { onUpdated, ref, onBeforeMount } from "vue";
-import userAvt from "@/assets/userAvt.png";
-import Profile from "@/components/profile/Profile.vue";
-import Activity from "@/components/profile/Activity.vue";
-import axios from "axios";
+<script setup lang="ts">
 import { onMounted, ref } from "vue";
-import { useAuthStore } from "@/stores/authStore";
+import userAvt from "@/assets/images/userAvt.png";
+import Profile from "../components/profile/Profile.vue";
+import Activity from "../components/profile/Activity.vue";
+import axios from "axios";
+import { useAuthStore } from "../stores/authStore";
+import { User } from "../types/type";
 
-const user = ref({
+const user = ref<User>({
   avt: "",
   firstName: "",
   lastName: "",
@@ -60,14 +15,14 @@ const user = ref({
   userName: "",
 });
 
-const activity = ref();
+const activity = ref<any>();
 
 const authStore = useAuthStore();
 
-const currentTab = ref("profile");
+const currentTab = ref<string>("profile");
 
 const headers = {
-  Authorization: `Bearer ${authStore.auth.access_token}`,
+  Authorization: `Bearer ${authStore.user.access_token}`,
 };
 
 onMounted(async () => {
@@ -95,6 +50,82 @@ onMounted(async () => {
   }
 });
 </script>
+
+<template>
+  <div class="h-fit w-full p-[30px] select-none">
+    <!-- -- -->
+    <div class="h-[108px] w-[357px] flex">
+      <n-image
+        width="100"
+        height="100"
+        class="rounded-[5px]"
+        :src="user.avt"
+        v-if="!(user.avt == '')"
+      />
+      <n-skeleton
+        v-if="user.avt == ''"
+        :width="100"
+        :height="100"
+        :sharp="false"
+        size="medium"
+      />
+      <div class="py-[22px] pl-[32px]">
+        <n-text
+          v-if="user.firstName || user.lastName"
+          class="font-[500] text-[22px] leading-[30px] block text-[#39455B]"
+        >
+          {{ user.firstName + " " + user.lastName }}
+        </n-text>
+        <n-skeleton
+          v-if="user.firstName == '' || user.lastName == ''"
+          :width="200"
+          :height="30"
+          :sharp="false"
+          size="medium"
+          class="block"
+        />
+        <n-text
+          class="leading-[22px] text-[14px] font-[400] text-[#80899A] block"
+          v-if="!(user.email == '')"
+        >
+          {{ user.email }}
+        </n-text>
+        <n-skeleton
+          v-if="user.email == ''"
+          :width="200"
+          :height="30"
+          :sharp="false"
+          size="medium"
+          class="block my-2"
+        />
+      </div>
+    </div>
+    <!-- -- -->
+    <div class="w-full my-[30px] border-solid border-b-[3px] h-fit py-[6px]">
+      <span
+        class="tab"
+        :class="{ active: currentTab === 'profile' }"
+        @click="currentTab = 'profile'"
+      >
+        Quản lí tài khoản
+      </span>
+      <span
+        class="tab"
+        :class="{ active: currentTab === 'activity' }"
+        @click="currentTab = 'activity'"
+      >
+        Hoạt động của tôi
+      </span>
+    </div>
+    <!-- --- -->
+    <component
+      :is="currentTab === 'profile' ? Profile : Activity"
+      :user="user"
+      :activity="activity"
+    />
+    <!-- --- -->
+  </div>
+</template>
 
 <style scoped>
 .tab {

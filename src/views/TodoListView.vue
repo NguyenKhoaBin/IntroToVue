@@ -1,5 +1,7 @@
+<script setup></script>
+
 <template>
-  <div class="h-screen w-full bg-[#597D9A] transition-all select-none">
+  <div class="h-full w-full bg-[#597D9A] transition-all select-none">
     <div
       class="bg-[#F7F9FC] h-full w-[550px] p-10 mx-auto flex flex-col items-center gap-5"
     >
@@ -9,8 +11,3 @@
     </div>
   </div>
 </template>
-
-<script setup>
-import AddTodo from "@/components/AddTodo.vue";
-import Todos from "@/components/Todos.vue";
-</script>
